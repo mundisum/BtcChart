@@ -84,7 +84,7 @@ public class MainActivity extends ActionBarActivity {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, final View view, int i, long l) {
                     final String item = (String)adapterView.getItemAtPosition(i);
-                    view.animate().setDuration(2000).alpha(0)
+                    view.animate().setDuration(1000).alpha(0)
                             .withEndAction(new Runnable() {
                                 @Override
                                 public void run() {
