@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -22,6 +24,8 @@ public class MainActivity extends ActionBarActivity {
     private ProgressDialog pDiag;
     private Button btnStart;
     private TextView txtResult;
+    private ListView listMarkets;
+    private MarketListAdapter listAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +34,7 @@ public class MainActivity extends ActionBarActivity {
 
         btnStart = (Button)findViewById(R.id.btnStart);
         txtResult = (TextView)findViewById(R.id.txtResult);
+        listMarkets = (ListView)findViewById(R.id.listMarkets);
     }
 
     @Override
@@ -67,13 +72,29 @@ public class MainActivity extends ActionBarActivity {
             if (pDiag.isShowing()){
                 pDiag.dismiss();
             }
-
-            String temp = "";
+            final ArrayList<String> list = new ArrayList<String>();
             for (BtcMarket market : markets){
-                temp += market.symbol;
+                list.add(market.symbol);
             }
 
-            txtResult.setText(temp);
+            listAdapter = new MarketListAdapter(MainActivity.this, android.R.layout.simple_list_item_1, list);
+            listMarkets.setAdapter(listAdapter);
+
+            listMarkets.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, final View view, int i, long l) {
+                    final String item = (String)adapterView.getItemAtPosition(i);
+                    view.animate().setDuration(2000).alpha(0)
+                            .withEndAction(new Runnable() {
+                                @Override
+                                public void run() {
+                                    list.remove(item);
+                                    listAdapter.notifyDataSetChanged();
+                                    view.setAlpha(1);
+                                }
+                            });
+                }
+            });
         }
 
         @Override
