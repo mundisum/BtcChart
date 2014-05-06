@@ -16,7 +16,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="se.andreasottesen.btcchart.app.MarketListActivity"
+            android:label="@string/title_activity_market_list" >
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
+
 </manifest>

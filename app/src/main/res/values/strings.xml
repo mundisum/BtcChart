@@ -4,5 +4,6 @@
     <string name="app_name">BtcChart</string>
     <string name="action_settings">Settings</string>
     <string name="btn_start">Start</string>
+    <string name="title_activity_market_list">MarketListActivity</string>
 
 </resources>

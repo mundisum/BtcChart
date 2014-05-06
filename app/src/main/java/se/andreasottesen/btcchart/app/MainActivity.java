@@ -1,31 +1,20 @@
 package se.andreasottesen.btcchart.app;
 
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import retrofit.RestAdapter;
-
 
 public class MainActivity extends ActionBarActivity {
-    public static final String API_URL = "http://api.bitcoincharts.com";
-
-    private ProgressDialog pDiag;
     private Button btnStart;
     private TextView txtResult;
     private ListView listMarkets;
-    private MarketListAdapter listAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,61 +47,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void btnStartOnClick(View view){
-        new GetDataAsyncTask().execute();
-    }
-
-    public class GetDataAsyncTask extends AsyncTask<Object, String, List<BtcMarket>>{
-        @Override
-        protected void onProgressUpdate(String... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected void onPostExecute(List<BtcMarket> markets) {
-            if (pDiag.isShowing()){
-                pDiag.dismiss();
-            }
-            final ArrayList<String> list = new ArrayList<String>();
-            for (BtcMarket market : markets){
-                list.add(market.symbol);
-            }
-
-            listAdapter = new MarketListAdapter(MainActivity.this, android.R.layout.simple_list_item_1, list);
-            listMarkets.setAdapter(listAdapter);
-
-            listMarkets.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, final View view, int i, long l) {
-                    final String item = (String)adapterView.getItemAtPosition(i);
-                    view.animate().setDuration(1000).alpha(0)
-                            .withEndAction(new Runnable() {
-                                @Override
-                                public void run() {
-                                    list.remove(item);
-                                    listAdapter.notifyDataSetChanged();
-                                    view.setAlpha(1);
-                                }
-                            });
-                }
-            });
-        }
-
-        @Override
-        protected void onPreExecute() {
-            pDiag = new ProgressDialog(MainActivity.this);
-            pDiag.setMessage("Fetching data, please wait.");
-            pDiag.show();
-        }
-
-        @Override
-        protected List<BtcMarket> doInBackground(Object... objects) {
-            RestAdapter restAdapter = new RestAdapter.Builder()
-                    .setEndpoint(API_URL)
-                    .build();
-            IBtcMarketService marketService = restAdapter.create(IBtcMarketService.class);
-            List<BtcMarket> markets = marketService.markets();
-
-            return markets;
-        }
+        Intent intent = new Intent(this, MarketListActivity.class);
+        startActivity(intent);
     }
 }
