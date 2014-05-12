@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import java.util.List;
@@ -20,11 +22,15 @@ public class MarketListActivity extends ListActivity {
     public static final String API_URL = "http://api.bitcoincharts.com";
 
     private ProgressDialog pDiag;
+    private MarketListAdapter listAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_market_list);
+
+        listAdapter = new MarketListAdapter(MarketListActivity.this, null);
+        setListAdapter(listAdapter);
 
         new GetDataAsyncTask().execute();
     }
@@ -61,39 +67,8 @@ public class MarketListActivity extends ListActivity {
                 pDiag.dismiss();
             }
 
-            setListAdapter(new BaseAdapter() {
-                @Override
-                public int getCount() {
-                    return markets.size();
-                }
-
-                @Override
-                public Object getItem(int i) {
-                    return markets.get(i);
-                }
-
-                @Override
-                public long getItemId(int i) {
-                    return i;
-                }
-
-                @Override
-                public View getView(int i, View view, ViewGroup viewGroup) {
-                    if (view == null){
-                        //view = View.inflate(MarketListActivity.this, android.R.layout.two_line_list_item, null);
-                        view = View.inflate(MarketListActivity.this, R.layout.markets_item, null);
-                    }
-
-                    BtcMarket market = (BtcMarket) getItem(i);
-                    TextView text = (TextView) view.findViewById(android.R.id.text1);
-                    text.setText(market.symbol);
-
-                    text = (TextView) view.findViewById(android.R.id.text2);
-                    text.setText(market.currency);
-
-                    return view;
-                }
-            });
+            listAdapter.setMarkets(markets);
+            listAdapter.notifyDataSetChanged();
         }
 
         @Override
