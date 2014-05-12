@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_gravity="center_vertical" />
+        android:layout_gravity="center_vertical"
+        android:focusable="false"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -22,12 +23,14 @@
         android:id="@android:id/text2"
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
-        android:textColor="@color/abc_search_url_text_holo" />
+        android:textColor="@color/abc_search_url_text_holo"
+        android:focusable="false"/>
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:id="@+id/btn_star"
-        android:button="@android:drawable/btn_star"/>
+        android:button="@android:drawable/btn_star"
+        android:focusable="false"/>
 </LinearLayout>

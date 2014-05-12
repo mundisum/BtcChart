@@ -20,6 +20,10 @@
             android:name="se.andreasottesen.btcchart.app.MarketListActivity"
             android:label="@string/title_activity_market_list" >
         </activity>
+        <activity
+            android:name="se.andreasottesen.btcchart.app.MarketActivity"
+            android:label="@string/title_activity_market" >
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

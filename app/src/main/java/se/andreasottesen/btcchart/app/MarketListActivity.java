@@ -2,6 +2,7 @@ package se.andreasottesen.btcchart.app;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -22,7 +23,7 @@ import retrofit.RestAdapter;
 
 public class MarketListActivity extends ListActivity {
     public static final String API_URL = "http://api.bitcoincharts.com";
-    public static final String STAR_STATES = "";
+    public static final String STAR_STATES = "btcchart:star_states";
 
     private boolean[] starStates;
     private ProgressDialog pDiag;
@@ -32,6 +33,12 @@ public class MarketListActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_market_list);
+
+        /*if (savedInstanceState != null){
+            starStates = savedInstanceState.getBooleanArray(STAR_STATES);
+        }else{
+
+        }*/
 
         listAdapter = new MarketListAdapter(MarketListActivity.this, null);
         setListAdapter(listAdapter);
@@ -62,12 +69,22 @@ public class MarketListActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         BtcMarket market = (BtcMarket) listAdapter.getItem(position);
-        showMessageToast(market.symbol);
+
+        Intent intent = new Intent();
+        intent.putExtra("symbol", market.symbol);
+        intent.putExtra("ask", market.ask);
+        intent.putExtra("bid", market.bid);
+        intent.putExtra("currency", market.currency);
+
+        intent.setClass(MarketListActivity.this, MarketActivity.class);
+
+        startActivity(intent);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        starStates = listAdapter.getStarStates();
         outState.putBooleanArray(STAR_STATES, starStates);
     }
 
@@ -87,6 +104,7 @@ public class MarketListActivity extends ListActivity {
                 pDiag.dismiss();
             }
 
+            //starStates = listAdapter.getStarStates();
             listAdapter.setMarkets(markets);
             listAdapter.notifyDataSetChanged();
         }

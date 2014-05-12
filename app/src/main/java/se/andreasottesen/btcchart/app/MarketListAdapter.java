@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -17,18 +18,28 @@ import java.util.List;
 public class MarketListAdapter extends BaseAdapter {
     private List<BtcMarket> markets;
     private Context context;
+    private boolean[] starStates;
 
     public MarketListAdapter(Context context, List<BtcMarket> markets){
         this.markets = markets;
         this.context = context;
+
+        if (markets != null) {
+            this.starStates = new boolean[markets.size()];
+        }
     }
 
     public void setMarkets(List<BtcMarket> markets){
         this.markets = markets;
+        this.starStates = new boolean[markets.size()];
     }
 
     public List<BtcMarket> getMarkets(){
         return this.markets;
+    }
+
+    public boolean[] getStarStates(){
+        return this.starStates;
     }
 
     @Override
@@ -56,7 +67,7 @@ public class MarketListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, final ViewGroup parent) {
         View view = convertView;
         MarketViewHolder holder = null;
 
@@ -67,7 +78,14 @@ public class MarketListAdapter extends BaseAdapter {
 
         holder = new MarketViewHolder();
         holder.star = (CheckBox)view.findViewById(R.id.btn_star);
-        holder.star.setOnCheckedChangeListener(starOnCheckedChanged);
+        holder.star.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                ListView listView = (ListView)parent;
+                final int position = listView.getPositionForView(buttonView);
+                starStates[position] = isChecked;
+            }
+        });
 
         holder.market = (BtcMarket) getItem(position);
         holder.content = (TextView) view.findViewById(android.R.id.text1);
@@ -79,10 +97,4 @@ public class MarketListAdapter extends BaseAdapter {
         return view;
     }
 
-    private CompoundButton.OnCheckedChangeListener starOnCheckedChanged = new CompoundButton.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-        }
-    };
 }
