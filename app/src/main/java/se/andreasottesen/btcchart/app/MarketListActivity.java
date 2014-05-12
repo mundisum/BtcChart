@@ -80,7 +80,8 @@ public class MarketListActivity extends ListActivity {
                 @Override
                 public View getView(int i, View view, ViewGroup viewGroup) {
                     if (view == null){
-                        view = View.inflate(MarketListActivity.this, android.R.layout.two_line_list_item, null);
+                        //view = View.inflate(MarketListActivity.this, android.R.layout.two_line_list_item, null);
+                        view = View.inflate(MarketListActivity.this, R.layout.markets_item, null);
                     }
 
                     BtcMarket market = (BtcMarket) getItem(i);
