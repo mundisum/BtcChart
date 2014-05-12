@@ -11,7 +11,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -20,7 +22,9 @@ import retrofit.RestAdapter;
 
 public class MarketListActivity extends ListActivity {
     public static final String API_URL = "http://api.bitcoincharts.com";
+    public static final String STAR_STATES = "";
 
+    private boolean[] starStates;
     private ProgressDialog pDiag;
     private MarketListAdapter listAdapter;
 
@@ -55,7 +59,23 @@ public class MarketListActivity extends ListActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public class GetDataAsyncTask extends AsyncTask<Object, String, List<BtcMarket>> {
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        BtcMarket market = (BtcMarket) listAdapter.getItem(position);
+        showMessageToast(market.symbol);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBooleanArray(STAR_STATES, starStates);
+    }
+
+    private void showMessageToast(String message){
+        Toast.makeText(MarketListActivity.this, message, Toast.LENGTH_LONG);
+    }
+
+    private class GetDataAsyncTask extends AsyncTask<Object, String, List<BtcMarket>> {
         @Override
         protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);

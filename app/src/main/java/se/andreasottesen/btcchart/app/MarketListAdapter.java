@@ -58,27 +58,31 @@ public class MarketListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
+        MarketViewHolder holder = null;
 
         if (view == null){
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.markets_item, null);
         }
 
-        BtcMarket market = (BtcMarket) getItem(position);
-        TextView text = (TextView) view.findViewById(android.R.id.text1);
-        text.setText(market.symbol);
+        holder = new MarketViewHolder();
+        holder.star = (CheckBox)view.findViewById(R.id.btn_star);
+        holder.star.setOnCheckedChangeListener(starOnCheckedChanged);
 
-        text = (TextView) view.findViewById(android.R.id.text2);
-        text.setText(market.currency);
+        holder.market = (BtcMarket) getItem(position);
+        holder.content = (TextView) view.findViewById(android.R.id.text1);
+        holder.content.setText(holder.market.symbol);
 
-        CheckBox btnStar = (CheckBox)view.findViewById(R.id.btn_star);
-        btnStar.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-
-            }
-        });
+        holder.currency = (TextView) view.findViewById(android.R.id.text2);
+        holder.currency.setText(holder.market.currency);
 
         return view;
     }
+
+    private CompoundButton.OnCheckedChangeListener starOnCheckedChanged = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+        }
+    };
 }
